@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model PackagingItem {
+  id                String              @id @unique
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  name              String              @db.VarChar(255)
+  type              String              @db.VarChar(255)
+  PackagingRegister PackagingRegister[]
+}
+
+model PackagingRegister {
+  id              Int           @id @default(autoincrement())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  packagingItem   PackagingItem @relation(fields: [packagingItemId], references: [id])
+  packagingItemId String
+  location        String        @db.VarChar(255)
+}
